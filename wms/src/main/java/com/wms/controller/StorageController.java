@@ -16,12 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * <p>
- *  前端控制器
- * </p>
- *
- */
+
 @RestController
 @RequestMapping("/storage")
 public class StorageController {

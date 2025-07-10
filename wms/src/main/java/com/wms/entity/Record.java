@@ -13,12 +13,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-/**
- * <p>
- * 
- * </p>
- *
- */
+
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ApiModel(value="Record对象", description="")

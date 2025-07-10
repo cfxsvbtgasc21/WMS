@@ -6,12 +6,7 @@ import com.wms.entity.Storage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.wms.entity.User;
 
-/**
- * <p>
- *  服务类
- * </p>
- *
- */
+
 public interface StorageService extends IService<Storage> {
 
     IPage pageCC(IPage<Storage> page, Wrapper wrapper);

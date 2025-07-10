@@ -1,0 +1,219 @@
+@startuml
+skinparam default {
+    FontSize 12
+    ArrowColor #444444
+    BackgroundColor White
+    BorderColor #333333
+    ArrowThickness 1
+}
+
+skinparam package {
+    BackgroundColor #F0F0F0
+    BorderColor #666666
+    FontStyle bold
+}
+
+skinparam class {
+    BackgroundColor White
+    BorderColor #666666
+    ArrowColor #444444
+}
+
+' 布局方向
+left to right direction
+hide empty members
+
+' 控制器层
+package "Controller Layer" as ctrl {
+    class GoodsController {
+        + save()
+        + update()
+        + listPage()
+    }
+
+    class GoodsTypeController {
+        + save()
+        + update()
+        + list()
+    }
+
+    class RecordController {
+        + save()
+        + listPage()
+    }
+
+    class StorageController {
+        + save()
+        + update()
+        + list()
+    }
+
+    class UserController {
+        + login()
+        + save()
+        + update()
+        + listPage()
+    }
+
+    ' 新增菜单控制器
+    class MenuController {
+        + list()
+    }
+}
+
+' 服务层
+package "Service Layer" as service {
+    interface GoodsService {
+        + save()
+        + pageCC()
+    }
+
+    interface GoodsTypeService {
+        + save()
+    }
+
+    interface RecordService {
+        + save()
+    }
+
+    interface StorageService {
+        + save()
+    }
+
+    interface UserService {
+        + login()
+        + save()
+        + pageCC()
+    }
+
+    ' 新增菜单服务接口
+    interface MenuService {
+        + list()
+    }
+}
+
+' 数据访问层
+package "Mapper Layer" as mapper {
+    interface GoodsMapper
+    interface GoodsTypeMapper
+    interface RecordMapper
+    interface StorageMapper
+    interface UserMapper
+
+    ' 新增菜单Mapper
+    interface MenuMapper
+}
+
+' 实体层
+package "Entity Layer" as entity {
+    class User {
+        - no : String
+        - name : String
+        - roleId : int
+    }
+
+    class Storage {
+        - name : String
+    }
+
+    class GoodsType {
+        - name : String
+    }
+
+    class Goods {
+        - name : String
+        - count : int
+    }
+
+    class Record {
+        - count : int
+        - createTime : Date
+    }
+
+    ' 新增菜单实体
+    class Menu {
+        - id : int
+        - menuCode : String
+        - menuName : String
+        - menuLevel : String
+        - menuParentCode : String
+    }
+}
+
+' 公共类
+package "Common" as common {
+    class QueryPageParam {
+        - pageNum : int
+        - pageSize : int
+    }
+
+    class Result {
+        + suc()
+        + fail()
+        + data()
+    }
+}
+
+' 服务实现层
+package "Service Impl" as serviceImpl {
+    class GoodsServiceImpl
+    class GoodsTypeServiceImpl
+    class RecordServiceImpl
+    class StorageServiceImpl
+    class UserServiceImpl
+
+    ' 新增菜单服务实现
+    class MenuServiceImpl
+}
+
+' ====== 关键关系 ======
+
+' 控制器依赖服务
+ctrl.GoodsController --> service.GoodsService
+ctrl.GoodsTypeController --> service.GoodsTypeService
+ctrl.RecordController --> service.RecordService
+ctrl.StorageController --> service.StorageService
+ctrl.UserController --> service.UserService
+ctrl.MenuController --> service.MenuService
+ctrl.UserController --> service.MenuService
+' 服务实现关系
+serviceImpl.GoodsServiceImpl --> service.GoodsService : implements
+serviceImpl.GoodsTypeServiceImpl --> service.GoodsTypeService : implements
+serviceImpl.RecordServiceImpl --> service.RecordService : implements
+serviceImpl.StorageServiceImpl --> service.StorageService : implements
+serviceImpl.UserServiceImpl --> service.UserService : implements
+serviceImpl.MenuServiceImpl --> service.MenuService : implements
+
+' 服务依赖Mapper
+serviceImpl.GoodsServiceImpl --> mapper.GoodsMapper
+serviceImpl.GoodsTypeServiceImpl --> mapper.GoodsTypeMapper
+serviceImpl.RecordServiceImpl --> mapper.RecordMapper
+serviceImpl.StorageServiceImpl --> mapper.StorageMapper
+serviceImpl.UserServiceImpl --> mapper.UserMapper
+serviceImpl.MenuServiceImpl --> mapper.MenuMapper
+
+' Mapper关联Entity
+mapper.GoodsMapper --> entity.Goods
+mapper.GoodsTypeMapper --> entity.GoodsType
+mapper.RecordMapper --> entity.Record
+mapper.StorageMapper --> entity.Storage
+mapper.UserMapper --> entity.User
+mapper.MenuMapper --> entity.Menu
+
+' 实体关联关系
+entity.Goods --> entity.Storage : belongs to
+entity.Goods --> entity.GoodsType : belongs to
+entity.Record --> entity.Goods : references
+entity.Record --> entity.User : references
+
+' 分页参数和结果
+ctrl.GoodsController --> common.QueryPageParam
+ctrl.GoodsController --> common.Result
+ctrl.UserController --> common.QueryPageParam
+ctrl.UserController --> common.Result
+
+' 服务分页方法
+service.GoodsService --> common.QueryPageParam
+service.UserService --> common.QueryPageParam
+
+@enduml

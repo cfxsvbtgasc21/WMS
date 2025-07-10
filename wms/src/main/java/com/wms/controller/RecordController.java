@@ -21,12 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 
-/**
- * <p>
- *  前端控制器
- * </p>
- *
- */
+
 @RestController
 @RequestMapping("/record")
 public class RecordController {
@@ -52,10 +47,13 @@ public class RecordController {
         QueryWrapper<Record> queryWrapper = new QueryWrapper();
         queryWrapper.apply(" a.goods=b.id and b.storage=c.id and b.goodsType=d.id ");
 
-        if("2".equals(roleId)){
-           // queryWrapper.eq(Record::getUserid,userId);
-            queryWrapper.apply(" a.userId= "+userId);
+        // 权限控制修改
+        if("1".equals(roleId)){ // 管理员
+            queryWrapper.eq("a.admin_id", userId); // 只看自己处理的记录
+        } else if("2".equals(roleId)){ // 普通用户
+            queryWrapper.eq("a.userId", userId); // 只看自己申请的记录
         }
+        // 超级管理员(roleId=0)不需要额外条件
 
         if(StringUtils.isNotBlank(name) && !"null".equals(name)){
             queryWrapper.like("b.name",name);

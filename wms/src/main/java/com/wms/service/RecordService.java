@@ -6,12 +6,7 @@ import com.wms.entity.Goods;
 import com.wms.entity.Record;
 import com.baomidou.mybatisplus.extension.service.IService;
 
-/**
- * <p>
- *  服务类
- * </p>
- *
- */
+
 public interface RecordService extends IService<Record> {
 
     IPage pageCC(IPage<Record> page, Wrapper wrapper);
